@@ -1,0 +1,42 @@
+-- 云记事本数据库建表脚本
+CREATE DATABASE IF NOT EXISTS cloudnote DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE cloudnote;
+
+-- 笔记表
+CREATE TABLE IF NOT EXISTS notes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT,
+    category VARCHAR(100) DEFAULT NULL,
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    is_deleted TINYINT(1) DEFAULT 0,
+    INDEX idx_is_deleted (is_deleted),
+    INDEX idx_update_time (update_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 笔记图片表
+CREATE TABLE IF NOT EXISTS note_images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    note_id INT NOT NULL,
+    image_path VARCHAR(500) NOT NULL,
+    image_name VARCHAR(255) NOT NULL,
+    upload_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 标签表
+CREATE TABLE IF NOT EXISTS tags (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    color VARCHAR(20) DEFAULT '#3498db'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 笔记-标签关联表
+CREATE TABLE IF NOT EXISTS note_tags (
+    note_id INT NOT NULL,
+    tag_id INT NOT NULL,
+    PRIMARY KEY (note_id, tag_id),
+    FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

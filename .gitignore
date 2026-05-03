@@ -1,0 +1,27 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# 环境配置
+.env
+
+# IDE
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+
+# 日志
+logs/
+
+# 用户上传图片
+src/main/resources/images/
+
+# 外部 jar
+*.jar
+
+# OS
+.DS_Store
+Thumbs.db
